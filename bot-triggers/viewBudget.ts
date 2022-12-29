@@ -10,7 +10,7 @@ import { sortBudgetItemsByCategory } from "../utils/sort.ts";
 export const viewBudget = async (ctx: Context) => {
     await displayBudget(ctx)
     await delay(1500)
-    await ctx.reply(`💡 <b>TIP:</b> Use /${BotCommands.Help} to get a detailed list of commands`, {
+    await ctx.reply(`💡 <b>Tip:</b> Use /${BotCommands.Help} to view budget bot commands`, {
         parse_mode: "HTML",
     });
 }
