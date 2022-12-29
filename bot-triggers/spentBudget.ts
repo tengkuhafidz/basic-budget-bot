@@ -4,18 +4,22 @@ import { BotCommands } from "../constants/botCommands.ts";
 import { CallbackQueryKeywords } from "../constants/callbackQuery.ts";
 import { Gifs } from "../constants/gifs.ts";
 import { DbQueries } from "../db-queries/index.ts";
-import { getBudgetCategories } from "../utils/budget.ts";
+import { displayNoExistingBudget, getBudgetCategories } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { delay } from "../utils/delay.ts";
 import { displayBudgetAfterDelay } from "../utils/displayBudget.ts";
 import { getRandom } from "../utils/getRandom.ts";
-import { displayQuickActions } from "../utils/quickActions.ts";
 
 export const spentBudget = async (ctx: Context) => {
     const ctxDetails = new CtxDetails(ctx)
     const { chatId } = ctxDetails
 
     const budgetCategories = await getBudgetCategories(chatId!)
+    if (!budgetCategories) {
+        displayNoExistingBudget(ctx)
+        return
+    }
+
     const budgetItemsKeyboard = budgetCategories.reduce((res, category) => res.text(category, `spent-${category}`).row(), new InlineKeyboard())
     budgetItemsKeyboard.text("CANCEL", "spent-cancel").row()
 

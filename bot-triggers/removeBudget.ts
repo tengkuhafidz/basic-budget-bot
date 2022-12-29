@@ -4,7 +4,7 @@ import { BotCommands } from "../constants/botCommands.ts";
 import { CallbackQueryKeywords } from "../constants/callbackQuery.ts";
 import { Gifs } from "../constants/gifs.ts";
 import { DbQueries } from "../db-queries/index.ts";
-import { getBudgetCategories } from "../utils/budget.ts";
+import { displayNoExistingBudget, getBudgetCategories } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { displayBudgetAfterDelay } from "../utils/displayBudget.ts";
 import { getRandom } from "../utils/getRandom.ts";
@@ -15,6 +15,11 @@ export const removeBudget = async (ctx: Context) => {
     const { chatId } = ctxDetails
 
     const budgetCategories = await getBudgetCategories(chatId!)
+    if (!budgetCategories) {
+        displayNoExistingBudget(ctx)
+        return
+    }
+
     const budgetItemsKeyboard = budgetCategories.reduce((res, category) => res.text(category, `prompt-remove-${category}`).row(), new InlineKeyboard())
     budgetItemsKeyboard.text("Remove All", "prompt-remove-all").text("Cancel", "prompt-remove-cancel").row()
 

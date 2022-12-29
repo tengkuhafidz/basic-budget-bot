@@ -2,6 +2,7 @@ import { Context } from "https://deno.land/x/grammy@v1.12.0/context.ts";
 import { BotCommands } from "../constants/botCommands.ts";
 import { DbQueries } from "../db-queries/index.ts";
 import { Budget, BudgetItems } from "../types/index.ts";
+import { displayNoExistingBudget } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { delay } from "../utils/delay.ts";
 import { sortBudgetItemsByCategory } from "../utils/sort.ts";
@@ -13,11 +14,7 @@ export const viewBudget = async (ctx: Context) => {
     const userBudget = await DbQueries.getBudget(chatId!)
 
     if (!isBudgetExist(userBudget)) {
-        const noBudgetExistText = `No existing budget found.
-To start tracking your budget, type /create`
-        await ctx.reply(noBudgetExistText, {
-            parse_mode: "HTML",
-        });
+        displayNoExistingBudget(ctx)
         return
     }
 
