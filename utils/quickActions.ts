@@ -3,7 +3,7 @@ import { BotCommands, commandDescriptions } from "../constants/botCommands.ts"
 import { delay } from "./delay.ts";
 
 export const displayQuickActions = async (ctx: Context, botCommands: BotCommands[]) => {
-    await delay(1500)
+    await delay(1000)
     await ctx.reply(formatQuickActions(botCommands), {
         parse_mode: "HTML"
     });

@@ -7,7 +7,7 @@ import { displayQuickActions } from "../utils/quickActions.ts";
 import { displayBudget } from "./viewBudget.ts";
 
 export const addBudget = async (ctx: Context) => {
-    const addBudgetPrompt = await ctx.reply("What budget category would you like to track?", {
+    const addBudgetPrompt = await ctx.reply("What budget would you like to track? (e.g. Groceries)", {
         reply_markup: { force_reply: true },
     });
 

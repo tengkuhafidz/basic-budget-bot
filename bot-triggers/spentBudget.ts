@@ -78,7 +78,7 @@ export const updateBudgetBalance = async (ctx: Context) => {
 
     await displayBudget(ctx)
 
-    await delay(1500)
+    await delay(1000)
     await ctx.reply(`💡 <b>Tip:</b> Use /${BotCommands.Spent} with negative amount to simulate budget top-up`, {
         parse_mode: "HTML",
     });
