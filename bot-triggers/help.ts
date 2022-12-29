@@ -9,9 +9,9 @@ export const help = (ctx: Context) => {
 /${BotCommands.Add}: ${commandDescriptions[BotCommands.Add]}
 /${BotCommands.Remove}: ${commandDescriptions[BotCommands.Remove]}
 
-<b>Manage Budget Balance</b>
-/${BotCommands.Spent}: ${commandDescriptions[BotCommands.Add]}
-/${BotCommands.Reset}: ${commandDescriptions[BotCommands.Remove]}
+<b>Update Budget Balance</b>
+/${BotCommands.Spent}: ${commandDescriptions[BotCommands.Spent]}
+/${BotCommands.Reset}: ${commandDescriptions[BotCommands.Reset]}
 
 <b>View Budget</b>
 /${BotCommands.View}: ${commandDescriptions[BotCommands.View]}
