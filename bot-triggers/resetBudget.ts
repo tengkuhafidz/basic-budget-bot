@@ -4,6 +4,7 @@ import { BotCommands } from "../constants/botCommands.ts";
 import { CallbackQueryKeywords } from "../constants/callbackQuery.ts";
 import { Gifs } from "../constants/gifs.ts";
 import { DbQueries } from "../db-queries/index.ts";
+import { displayNoExistingBudget, getBudgetCategories } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { delay } from "../utils/delay.ts";
 import { getRandom } from "../utils/getRandom.ts";
@@ -32,7 +33,12 @@ export const confirmReset = async (ctx: Context, callbackQueryValue: string) => 
     const ctxDetails = new CtxDetails(ctx)
     const { chatId } = ctxDetails
 
-    await DbQueries.resetBudget(chatId!)
+    const budgetCategories = await getBudgetCategories(chatId!)
+    if (!budgetCategories) {
+        displayNoExistingBudget(ctx)
+        return
+    }
+    await DbQueries.resetBudget(chatId!, budgetCategories)
 
     await ctx.editMessageText(`Woohoo, spending reset! 🤑`)
     ctx.replyWithAnimation(getRandom(Gifs.reset))

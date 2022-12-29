@@ -64,12 +64,11 @@ const getBudget = async (chatId: string) => {
     }
 }
 
-const resetBudget = async (chatId: string) => {
+const resetBudget = async (chatId: string, budgetCategories: string[]) => {
     try {
-        const budgetCategories = await getBudgetCategories(chatId)
         const docRef = doc(db, "budgets", chatId)
 
-        for await (const category of budgetCategories) {
+        for await (const category of budgetCategories!) {
             updateDoc(docRef, {
                 [`budgetItems.${category}.spent`]: 0,
             })

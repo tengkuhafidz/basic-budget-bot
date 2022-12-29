@@ -65,9 +65,6 @@ export const confirmRemove = async (ctx: Context, callbackQueryValue: string) =>
     }
 
     await ctx.editMessageText(`Removed ${budgetCategory} from budget categories.`)
-    ctx.replyWithAnimation(getRandom(Gifs.remove))
-    await delay(3500)
-
     await displayBudget(ctx)
     await displayQuickActions(ctx, [BotCommands.Add, BotCommands.Remove])
 }
