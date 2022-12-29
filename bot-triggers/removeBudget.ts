@@ -40,6 +40,7 @@ export const promptRemove = async (ctx: Context, callbackQueryValue: string) => 
 
     if (budgetCategory === "cancel") {
         await replyCancelRemove(ctx)
+        return
     }
 
     const confirmKeyboard = new InlineKeyboard().text(`Yes, remove ${budgetCategory}`, "confirm-remove-yes").text("No, cancel!", "confirm-remove-no")
