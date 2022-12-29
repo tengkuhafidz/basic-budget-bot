@@ -3,7 +3,7 @@ import { BotCommands } from "../constants/botCommands.ts";
 import { DbQueries } from "../db-queries/index.ts";
 
 export const displayNoExistingBudget = (ctx: Context) => {
-    const noBudgetExistText = `<b>No Existing Budget</b>
+    const noBudgetExistText = `<b>No Existing Budget 😅</b>
 Add budget to be tracked with /${BotCommands.Add}`
     ctx.reply(noBudgetExistText, {
         parse_mode: "HTML",
@@ -11,7 +11,7 @@ Add budget to be tracked with /${BotCommands.Add}`
 }
 
 export const displayAmountErrorMessage = (ctx: Context) => {
-    ctx.reply("Amount must be in numbers. Exclude any symbols.", {
+    ctx.reply("❌ Amount must be in numbers. Exclude any symbols.", {
         parse_mode: "HTML",
         reply_markup: { remove_keyboard: true },
     });
