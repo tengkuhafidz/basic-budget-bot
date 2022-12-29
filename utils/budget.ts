@@ -4,7 +4,7 @@ import { DbQueries } from "../db-queries/index.ts";
 
 export const displayNoExistingBudget = (ctx: Context) => {
     const noBudgetExistText = `<b>No Existing Budget</b>
-    Add budget to be tracked with /${BotCommands.Add}`
+Add budget to be tracked with /${BotCommands.Add}`
     ctx.reply(noBudgetExistText, {
         parse_mode: "HTML",
     });
