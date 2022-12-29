@@ -3,8 +3,10 @@ export interface Budget {
 }
 
 export interface BudgetItems {
-    [key: string]: {
-        limit: number,
-        spent: number
-    }
+    [key: string]: BudgetItemValues
+}
+
+export interface BudgetItemValues {
+    limit: number,
+    spent: number
 }

@@ -1,7 +1,7 @@
 import { Context } from "https://deno.land/x/grammy@v1.12.0/context.ts";
 import { BotCommands } from "../constants/botCommands.ts";
 import { DbQueries } from "../db-queries/index.ts";
-import { Budget, BudgetItems } from "../types/index.ts";
+import { Budget, BudgetItems, BudgetItemValues } from "../types/index.ts";
 import { displayNoExistingBudget } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { delay } from "../utils/delay.ts";
@@ -43,14 +43,24 @@ const isBudgetExist = (budget: Budget) => {
 }
 
 const constructViewBudgetText = (budgetItems: BudgetItems) => {
+    let totalSpent = 0
+    let totalLimit = 0
     return `🏦 BUDGET BALANCE
 ${Object.entries(budgetItems).map(([budgetCategory, budgetValues]) => {
-        const percentageSpent = budgetValues.spent === 0 ? "0%" : ((budgetValues.spent / budgetValues.limit) * 100).toFixed(0) + "%"
-        return (`
-<b>${budgetCategory}</b>
-💸 $${budgetValues.spent} / $${budgetValues.limit} (${percentageSpent})
-💰 $${budgetValues.limit - budgetValues.spent}
-`)
+        totalSpent += budgetValues.spent
+        totalLimit += budgetValues.limit
+        return formatBudgetBalance(budgetCategory, budgetValues)
     }).join('')}
+=====
+${formatBudgetBalance("Overall Total", { spent: totalSpent, limit: totalLimit })}
+`
+}
+
+const formatBudgetBalance = (budgetCategory: string, { limit, spent }: BudgetItemValues) => {
+    const percentageSpent = spent === 0 ? "0%" : ((spent / limit) * 100).toFixed(0) + "%"
+    return `
+<b>${budgetCategory}</b>
+💸 $${spent} / $${limit} (${percentageSpent})
+💰 $${limit - spent}
 `
 }
