@@ -1,6 +1,7 @@
 import { Context } from "https://deno.land/x/grammy@v1.12.0/mod.ts";
 import { BotCommands } from "../constants/botCommands.ts";
 import { DbQueries } from "../db-queries/index.ts";
+import { displayAmountErrorMessage } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { displayQuickActions } from "../utils/quickActions.ts";
 import { viewBudget } from "./viewBudget.ts";
@@ -40,6 +41,11 @@ export const saveBudgetCategory = async (ctx: Context) => {
     const ctxDetails = new CtxDetails(ctx)
     const { messageText: budgetLimit, chatId } = ctxDetails
     if (!budgetLimit || !chatId) {
+        return
+    }
+
+    if (isNaN(Number(budgetLimit))) {
+        displayAmountErrorMessage(ctx)
         return
     }
 

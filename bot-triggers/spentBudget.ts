@@ -4,7 +4,7 @@ import { BotCommands } from "../constants/botCommands.ts";
 import { CallbackQueryKeywords } from "../constants/callbackQuery.ts";
 import { Gifs } from "../constants/gifs.ts";
 import { DbQueries } from "../db-queries/index.ts";
-import { displayNoExistingBudget, getBudgetCategories } from "../utils/budget.ts";
+import { displayAmountErrorMessage, displayNoExistingBudget, getBudgetCategories } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { delay } from "../utils/delay.ts";
 import { displayBudgetAfterDelay } from "../utils/displayBudget.ts";
@@ -57,6 +57,11 @@ export const updateBudgetBalance = async (ctx: Context) => {
     const ctxDetails = new CtxDetails(ctx)
     const { messageText: spentAmount, chatId } = ctxDetails
     if (!spentAmount || !chatId) {
+        return
+    }
+
+    if (isNaN(Number(spentAmount))) {
+        displayAmountErrorMessage(ctx)
         return
     }
 
