@@ -12,7 +12,7 @@ Add new budget with /${BotCommands.Add}`
 
 export const displayAmountErrorMessage = (ctx: Context) => {
     const errorMessage = `⚠️ <b>Amount must be in numbers</b>. 
-<i>Note: Exclude dollar symbol</i>.`
+<i>Note: Exclude dollar symbol</i>. `
 
     ctx.reply(errorMessage, {
         parse_mode: "HTML",
