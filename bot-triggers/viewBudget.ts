@@ -1,0 +1,56 @@
+import { Context } from "https://deno.land/x/grammy@v1.12.0/context.ts";
+import { BotCommands } from "../constants/botCommands.ts";
+import { DbQueries } from "../db-queries/index.ts";
+import { Budget, BudgetItems } from "../types/index.ts";
+import { CtxDetails } from "../utils/CtxDetails.ts";
+import { delay } from "../utils/delay.ts";
+import { sortBudgetItemsByCategory } from "../utils/sort.ts";
+
+export const viewBudget = async (ctx: Context) => {
+    const ctxDetails = new CtxDetails(ctx)
+    const { chatId } = ctxDetails
+
+    const userBudget = await DbQueries.getBudget(chatId!)
+
+    if (!isBudgetExist(userBudget)) {
+        const noBudgetExistText = `No existing budget found.
+To start tracking your budget, type /create`
+        await ctx.reply(noBudgetExistText, {
+            parse_mode: "HTML",
+        });
+        return
+    }
+
+    const { budgetItems: unsortedBudgetItems } = userBudget
+    const sortedBudgetItems = sortBudgetItemsByCategory(unsortedBudgetItems)
+    const formattedText = constructViewBudgetText(sortedBudgetItems)
+
+    await ctx.reply(formattedText, {
+        parse_mode: "HTML",
+    });
+
+    await delay(1500)
+    await ctx.reply(`💡 <b>TIP:</b> Use /${BotCommands.Help} to get a detailed list of commands`, {
+        parse_mode: "HTML",
+    });
+}
+
+const isBudgetExist = (budget: Budget) => {
+    if (budget && budget?.budgetItems && Object.keys(budget?.budgetItems)?.length > 0) {
+        return true
+    }
+    return false
+}
+
+const constructViewBudgetText = (budgetItems: BudgetItems) => {
+    return `🏦 BUDGET BALANCE
+${Object.entries(budgetItems).map(([budgetCategory, budgetValues]) => {
+        const percentageSpent = budgetValues.spent === 0 ? "0%" : ((budgetValues.spent / budgetValues.limit) * 100).toFixed(0) + "%"
+        return (`
+<b>${budgetCategory}</b>
+💸 $${budgetValues.spent} / $${budgetValues.limit} (${percentageSpent})
+💰 $${budgetValues.limit - budgetValues.spent}
+`)
+    }).join('')}
+`
+}

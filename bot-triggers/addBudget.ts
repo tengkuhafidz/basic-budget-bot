@@ -1,0 +1,56 @@
+import { Context } from "https://deno.land/x/grammy@v1.12.0/mod.ts";
+import { BotCommands } from "../constants/botCommands.ts";
+import { DbQueries } from "../db-queries/index.ts";
+import { CtxDetails } from "../utils/CtxDetails.ts";
+import { displayQuickActions } from "../utils/quickActions.ts";
+import { viewBudget } from "./viewBudget.ts";
+
+export const addBudget = async (ctx: Context) => {
+    const addBudgetPrompt = await ctx.reply("What budget category would you like to track?", {
+        reply_markup: { force_reply: true },
+    });
+
+    return addBudgetPrompt?.message_id
+}
+
+// =============================================================================
+// Catch-all Message Reply
+// =============================================================================
+
+let budgetCategory: string
+
+export const promptAddBudgetCategoryLimit = async (ctx: Context) => {
+    const ctxDetails = new CtxDetails(ctx)
+    const { messageText } = ctxDetails
+    budgetCategory = messageText!
+    if (!budgetCategory) {
+        return
+    }
+
+    const replyText = `What is the budget amount for <b>${budgetCategory}</b>?`
+    const budgetLimitPrompt = await ctx.reply(replyText, {
+        parse_mode: "HTML",
+        reply_markup: { force_reply: true },
+    });
+
+    return budgetLimitPrompt?.message_id
+}
+
+export const saveBudgetCategory = async (ctx: Context) => {
+    const ctxDetails = new CtxDetails(ctx)
+    const { messageText: budgetLimit, chatId } = ctxDetails
+    if (!budgetLimit || !chatId) {
+        return
+    }
+
+    DbQueries.addBudgetItem(chatId, budgetCategory, Number(budgetLimit))
+    const replyText = `Added new budget: <b>${budgetCategory} ($${budgetLimit})</b>`
+
+    await ctx.reply(replyText, {
+        parse_mode: "HTML",
+        reply_markup: { remove_keyboard: true },
+    });
+
+    await viewBudget(ctx);
+    await displayQuickActions(ctx, [BotCommands.Add, BotCommands.Remove])
+}
