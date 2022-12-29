@@ -4,7 +4,7 @@ import { DbQueries } from "../db-queries/index.ts";
 import { displayAmountErrorMessage } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { displayQuickActions } from "../utils/quickActions.ts";
-import { viewBudget } from "./viewBudget.ts";
+import { displayBudget } from "./viewBudget.ts";
 
 export const addBudget = async (ctx: Context) => {
     const addBudgetPrompt = await ctx.reply("What budget category would you like to track?", {
@@ -57,6 +57,6 @@ export const saveBudgetCategory = async (ctx: Context) => {
         reply_markup: { remove_keyboard: true },
     });
 
-    await viewBudget(ctx);
+    await displayBudget(ctx);
     await displayQuickActions(ctx, [BotCommands.Add, BotCommands.Remove])
 }

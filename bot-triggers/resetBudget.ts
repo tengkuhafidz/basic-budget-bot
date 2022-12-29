@@ -5,9 +5,10 @@ import { CallbackQueryKeywords } from "../constants/callbackQuery.ts";
 import { Gifs } from "../constants/gifs.ts";
 import { DbQueries } from "../db-queries/index.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
-import { displayBudgetAfterDelay } from "../utils/displayBudget.ts";
+import { delay } from "../utils/delay.ts";
 import { getRandom } from "../utils/getRandom.ts";
 import { displayQuickActions } from "../utils/quickActions.ts";
+import { displayBudget } from "./viewBudget.ts";
 
 export const resetBudget = async (ctx: Context) => {
     const confirmKeyboard = new InlineKeyboard().text("Yes, reset", "reset-yes").text("No, cancel!", "reset-no")
@@ -35,7 +36,8 @@ export const confirmReset = async (ctx: Context, callbackQueryValue: string) => 
 
     await ctx.editMessageText(`Woohoo, spending reset! 🤑`)
     ctx.replyWithAnimation(getRandom(Gifs.reset))
+    await delay(3500)
 
-    await displayBudgetAfterDelay(ctx)
+    await displayBudget(ctx)
     await displayQuickActions(ctx, [BotCommands.Spent])
 }

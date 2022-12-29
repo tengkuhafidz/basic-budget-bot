@@ -7,8 +7,8 @@ import { DbQueries } from "../db-queries/index.ts";
 import { displayAmountErrorMessage, displayNoExistingBudget, getBudgetCategories } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { delay } from "../utils/delay.ts";
-import { displayBudgetAfterDelay } from "../utils/displayBudget.ts";
 import { getRandom } from "../utils/getRandom.ts";
+import { displayBudget } from "./viewBudget.ts";
 
 export const spentBudget = async (ctx: Context) => {
     const ctxDetails = new CtxDetails(ctx)
@@ -74,8 +74,9 @@ export const updateBudgetBalance = async (ctx: Context) => {
     });
 
     ctx.replyWithAnimation(getRandom(Gifs.spent))
+    await delay(3500)
 
-    await displayBudgetAfterDelay(ctx)
+    await displayBudget(ctx)
 
     await delay(1500)
     await ctx.reply(`💡 <b>TIP:</b> Use /${BotCommands.Spent} with negative amount to simulate budget top-up`, {

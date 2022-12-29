@@ -1,3 +1,4 @@
+import { delay } from "https://deno.land/std@0.154.0/async/delay.ts";
 import { Context } from "https://deno.land/x/grammy@v1.12.0/context.ts";
 import { InlineKeyboard } from "https://deno.land/x/grammy@v1.12.0/mod.ts";
 import { BotCommands } from "../constants/botCommands.ts";
@@ -6,9 +7,9 @@ import { Gifs } from "../constants/gifs.ts";
 import { DbQueries } from "../db-queries/index.ts";
 import { displayNoExistingBudget, getBudgetCategories } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
-import { displayBudgetAfterDelay } from "../utils/displayBudget.ts";
 import { getRandom } from "../utils/getRandom.ts";
 import { displayQuickActions } from "../utils/quickActions.ts";
+import { displayBudget } from "./viewBudget.ts";
 
 export const removeBudget = async (ctx: Context) => {
     const ctxDetails = new CtxDetails(ctx)
@@ -64,8 +65,9 @@ export const confirmRemove = async (ctx: Context, callbackQueryValue: string) =>
 
     await ctx.editMessageText(`Removed ${budgetCategory} from budget categories.`)
     ctx.replyWithAnimation(getRandom(Gifs.remove))
+    await delay(3500)
 
-    await displayBudgetAfterDelay(ctx)
+    await displayBudget(ctx)
     await displayQuickActions(ctx, [BotCommands.Add, BotCommands.Remove])
 }
 

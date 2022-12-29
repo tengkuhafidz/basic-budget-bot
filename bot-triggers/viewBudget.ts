@@ -8,6 +8,14 @@ import { delay } from "../utils/delay.ts";
 import { sortBudgetItemsByCategory } from "../utils/sort.ts";
 
 export const viewBudget = async (ctx: Context) => {
+    await displayBudget(ctx)
+    await delay(1500)
+    await ctx.reply(`💡 <b>TIP:</b> Use /${BotCommands.Help} to get a detailed list of commands`, {
+        parse_mode: "HTML",
+    });
+}
+
+export const displayBudget = async (ctx: Context) => {
     const ctxDetails = new CtxDetails(ctx)
     const { chatId } = ctxDetails
 
@@ -23,11 +31,6 @@ export const viewBudget = async (ctx: Context) => {
     const formattedText = constructViewBudgetText(sortedBudgetItems)
 
     await ctx.reply(formattedText, {
-        parse_mode: "HTML",
-    });
-
-    await delay(1500)
-    await ctx.reply(`💡 <b>TIP:</b> Use /${BotCommands.Help} to get a detailed list of commands`, {
         parse_mode: "HTML",
     });
 }
