@@ -26,9 +26,9 @@ export const displayBudget = async (ctx: Context) => {
         return
     }
 
-    const { budgetItems: unsortedBudgetItems } = userBudget
+    const { budgetItems: unsortedBudgetItems, lastResetAt } = userBudget
     const sortedBudgetItems = sortBudgetItemsByCategory(unsortedBudgetItems)
-    const formattedText = constructViewBudgetText(sortedBudgetItems)
+    const formattedText = constructViewBudgetText(sortedBudgetItems, lastResetAt)
 
     await ctx.reply(formattedText, {
         parse_mode: "HTML",
@@ -42,11 +42,19 @@ const isBudgetExist = (budget: Budget) => {
     return false
 }
 
-const constructViewBudgetText = (budgetItems: BudgetItems) => {
+const constructViewBudgetText = (budgetItems: BudgetItems, lastResetAt?: string) => {
+    const lastResetAtText = !lastResetAt ? "" : `Last reset: ${lastResetAt}
+` // intentional new line for message formatting
+
+    return `🏦 <b>BUDGET BALANCE</b>
+${lastResetAtText}${constructBudgetBalances(budgetItems)}
+`
+}
+
+const constructBudgetBalances = (budgetItems: BudgetItems) => {
     let totalSpent = 0
     let totalLimit = 0
-    return `🏦 BUDGET BALANCE
-${Object.entries(budgetItems).map(([budgetCategory, budgetValues]) => {
+    return `${Object.entries(budgetItems).map(([budgetCategory, budgetValues]) => {
         totalSpent += budgetValues.spent
         totalLimit += budgetValues.limit
         return formatBudgetBalance(budgetCategory, budgetValues)

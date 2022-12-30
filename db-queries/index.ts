@@ -1,7 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
 import { deleteField, doc, getDoc, getFirestore, increment, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 import { appConfig } from "../configs/appConfig.ts";
-import { getBudgetCategories } from '../utils/budget.ts';
+import { getFormattedDate } from "../utils/date.ts";
 
 const firebaseApp = initializeApp(appConfig.firebaseConfig);
 const db = getFirestore(firebaseApp);
@@ -71,6 +71,7 @@ const resetBudget = async (chatId: string, budgetCategories: string[]) => {
         for await (const category of budgetCategories!) {
             updateDoc(docRef, {
                 [`budgetItems.${category}.spent`]: 0,
+                "lastResetAt": getFormattedDate()
             })
         }
 
