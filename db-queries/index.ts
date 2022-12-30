@@ -1,6 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
 import { deleteField, doc, getDoc, getFirestore, increment, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 import { appConfig } from "../configs/appConfig.ts";
+import { Budget } from '../types/index.ts';
 import { getFormattedDate } from "../utils/date.ts";
 
 const firebaseApp = initializeApp(appConfig.firebaseConfig);
@@ -53,14 +54,14 @@ const updateSpent = async (chatId: string, budgetCategory: string, spentAmount: 
     }
 }
 
-const getBudget = async (chatId: string) => {
+const getBudget = async (chatId: string): Promise<Budget | undefined> => {
     try {
         const docRef = doc(db, "budgets", chatId)
         const docSnap = await getDoc(docRef);
         return docSnap.data()
     } catch (error) {
         console.log("[ERROR] getBudget", error)
-        return null
+        return undefined
     }
 }
 

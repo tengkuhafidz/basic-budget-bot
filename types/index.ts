@@ -1,5 +1,6 @@
 export interface Budget {
-    budgetItems: BudgetItems
+    budgetItems: BudgetItems,
+    lastResetAt: string
 }
 
 export interface BudgetItems {

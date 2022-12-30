@@ -26,7 +26,7 @@ export const displayBudget = async (ctx: Context) => {
         return
     }
 
-    const { budgetItems: unsortedBudgetItems, lastResetAt } = userBudget
+    const { budgetItems: unsortedBudgetItems, lastResetAt } = userBudget!
     const sortedBudgetItems = sortBudgetItemsByCategory(unsortedBudgetItems)
     const formattedText = constructViewBudgetText(sortedBudgetItems, lastResetAt)
 
@@ -35,7 +35,7 @@ export const displayBudget = async (ctx: Context) => {
     });
 }
 
-const isBudgetExist = (budget: Budget) => {
+const isBudgetExist = (budget?: Budget) => {
     if (budget && budget?.budgetItems && Object.keys(budget?.budgetItems)?.length > 0) {
         return true
     }
