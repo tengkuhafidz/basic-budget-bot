@@ -3,6 +3,7 @@ import { BotCommands } from "../constants/botCommands.ts";
 import { DbQueries } from "../db-queries/index.ts";
 import { displayAmountErrorMessage } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
+import { formatAmount } from "../utils/formatAmount.ts";
 import { displayQuickActions } from "../utils/quickActions.ts";
 import { displayBudget } from "./viewBudget.ts";
 
@@ -48,9 +49,9 @@ export const saveBudgetCategory = async (ctx: Context) => {
         displayAmountErrorMessage(ctx)
         return
     }
-
-    DbQueries.addBudgetItem(chatId, budgetCategory, Number(budgetLimit))
-    const replyText = `Added new budget: <b>${budgetCategory} ($${budgetLimit})</b>`
+    const formattedBudgetLimit = formatAmount(Number(budgetLimit));
+    DbQueries.addBudgetItem(chatId, budgetCategory, formattedBudgetLimit)
+    const replyText = `Added new budget: <b>${budgetCategory} ($${formattedBudgetLimit})</b>`
 
     await ctx.reply(replyText, {
         parse_mode: "HTML",

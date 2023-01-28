@@ -5,6 +5,7 @@ import { Budget, BudgetItems, BudgetItemValues } from "../types/index.ts";
 import { displayNoExistingBudget } from "../utils/budget.ts";
 import { CtxDetails } from "../utils/CtxDetails.ts";
 import { delay } from "../utils/delay.ts";
+import { formatAmount } from "../utils/formatAmount.ts";
 import { sortBudgetItemsByCategory } from "../utils/sort.ts";
 
 export const viewBudget = async (ctx: Context) => {
@@ -68,7 +69,7 @@ const formatBudgetBalance = (budgetCategory: string, { limit, spent }: BudgetIte
     const percentageSpent = spent === 0 ? "0%" : ((spent / limit) * 100).toFixed(0) + "%"
     return `
 <b>${budgetCategory}</b>
-💸 $${spent} / $${limit} (${percentageSpent})
-💰 $${limit - spent}
+💸 $${formatAmount(spent)} / $${limit} (${percentageSpent})
+💰 $${formatAmount(limit - spent)}
 `
 }
