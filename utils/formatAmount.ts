@@ -1,6 +1,6 @@
-export const formatAmount = (amount: number): number => {
+export const formatAmount = (amount: number): string => {
     if (amount % 1 !== 0) {
-        return Number(amount.toFixed(2));
+        return amount.toFixed(2);
     }
-    return amount;
+    return amount.toString();
 }

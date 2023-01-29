@@ -7,7 +7,7 @@ import { getFormattedDate } from "../utils/date.ts";
 const firebaseApp = initializeApp(appConfig.firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-const addBudgetItem = async (chatId: string, category: string, limit: number) => {
+const addBudgetItem = async (chatId: string, category: string, limit: string) => {
     try {
         const dbRef = doc(db, "budgets", chatId)
 
@@ -26,7 +26,7 @@ const addBudgetItem = async (chatId: string, category: string, limit: number) =>
     }
 }
 
-const createBudgetAndAddBudgetItem = async (chatId: string, category: string, limit: number) => {
+const createBudgetAndAddBudgetItem = async (chatId: string, category: string, limit: string) => {
     try {
         const dbRef = doc(db, "budgets", chatId)
         await setDoc(dbRef, {
