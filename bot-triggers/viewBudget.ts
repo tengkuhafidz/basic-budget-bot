@@ -69,7 +69,7 @@ const formatBudgetBalance = (budgetCategory: string, { limit, spent }: BudgetIte
     const percentageSpent = spent === 0 ? "0%" : ((spent / limit) * 100).toFixed(0) + "%"
     return `
 <b>${budgetCategory}</b>
-💸 $${formatAmount(spent)} / $${limit} (${percentageSpent})
+💸 $${formatAmount(spent)} / $${formatAmount(limit)} (${percentageSpent})
 💰 $${formatAmount(limit - spent)}
 `
 }

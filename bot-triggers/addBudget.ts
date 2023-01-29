@@ -49,9 +49,8 @@ export const saveBudgetCategory = async (ctx: Context) => {
         displayAmountErrorMessage(ctx)
         return
     }
-    const formattedBudgetLimit = formatAmount(Number(budgetLimit));
-    DbQueries.addBudgetItem(chatId, budgetCategory, formattedBudgetLimit)
-    const replyText = `Added new budget: <b>${budgetCategory} ($${formattedBudgetLimit})</b>`
+    DbQueries.addBudgetItem(chatId, budgetCategory, Number(budgetLimit))
+    const replyText = `Added new budget: <b>${budgetCategory} ($${formatAmount(Number(budgetLimit))}</b>`
 
     await ctx.reply(replyText, {
         parse_mode: "HTML",
